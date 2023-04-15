@@ -1,5 +1,3 @@
-//console.log("hello world")
-
 /* 
   client side
     template: static template
@@ -11,16 +9,8 @@
   server side
     json-server
     CRUD: create(post), read(get), update(put, patch), delete(delete)
-
-
 */
 
-//read
-/* fetch("http://localhost:3000/todos")
-    .then((res) => res.json())
-    .then((data) => {
-        console.log(data);
-    }); */
 
 const APIs = (() => {
     const createTodo = (newTodo) => {
@@ -57,8 +47,6 @@ const APIs = (() => {
 /* 
     hashMap: faster to search
     array: easier to iterate, has order
-
-
 */
 const Model = (() => {
     class State {
@@ -91,23 +79,12 @@ const Model = (() => {
         updateTodo,
     };
 })();
-/* 
-    todos = [
-        {
-            id:1,
-            content:"eat lunch"
-        },
-        {
-            id:2,
-            content:"eat breakfast"
-        }
-    ]
 
-*/
 const View = (() => {
     const todolistpendingEl = document.querySelector(".todolist_pending");
     const todolistcompletedEl = document.querySelector(".todolist_completed");
     const submitBtnEl = document.querySelector(".submit-btn");
+    const editBtnEl = document.querySelector(".edit-btn");
     const inputEl = document.querySelector(".input");
 
     const renderTodos = (todos) => {
@@ -140,7 +117,7 @@ const View = (() => {
         inputEl.value = "";
     };
 
-    return { renderTodos, submitBtnEl, inputEl, clearInput, todolistpendingEl, todolistcompletedEl };
+    return { renderTodos, submitBtnEl, inputEl, editBtnEl, clearInput, todolistpendingEl, todolistcompletedEl };
 })();
 
 const Controller = ((view, model) => {
@@ -201,7 +178,7 @@ const Controller = ((view, model) => {
                 state.todos.map((todoitem) => {
                     if (+todoitem.id === +move_id) {
                         todoitem.completed = true;
-                        model.updateTodo(move_id, todoitem);
+                        model.updateTodo(move_id, todoitem).then(data => console.log("completed!", data));
                     }
                   });
             }
@@ -214,18 +191,58 @@ const Controller = ((view, model) => {
                     console.log(todoitem, move_id)
                     if (+todoitem.id === +move_id) {
                         todoitem.completed = false;
-                        model.updateTodo(move_id, todoitem);
+                        model.updateTodo(move_id, todoitem).then(data => console.log("Uncomplete!", data));;
                     }
                   });
             }
         })
     };
 
+    const handleEdit = () =>{
+        view.todolistpendingEl.addEventListener("click", (event) =>{
+            if(event.target.className === "edit-btn"){
+                const editid = event.target.id.split("_")[1];
+                const spanEl = event.target.parentElement.firstChild;
+                spanEl.classList.add("editing_span");
+                spanEl.contentEditable = true;
+                spanEl.addEventListener("keyup", (event) => {
+                    if(event.code === 'Enter'){
+                        // console.log("finished!", spanEl.innerHTML)
+                        model.updateTodo(+editid, { content: spanEl.innerHTML }).then(() => {
+                        spanEl.contentEditable = "false";
+                        spanEl.classList.remove("editing_span");
+                        });
+                    }
+                })
+            }
+        })
+
+        view.todolistcompletedEl.addEventListener("click", (event) =>{
+            if(event.target.className === "edit-btn"){
+                const editid = event.target.id.split("_")[1];
+                const spanEl = event.target.parentElement.firstChild;
+                spanEl.classList.add("editing_span");
+                spanEl.contentEditable = true;
+                spanEl.addEventListener("keyup", (event) => {
+                    if(event.code === 'Enter'){
+                        // console.log("finished!", spanEl.innerHTML)
+                        model.updateTodo(+editid, { content: spanEl.innerHTML }).then(() => {
+                        spanEl.contentEditable = "false";
+                        spanEl.classList.remove("editing_span");
+                        });
+                    }
+                })
+            }
+        })
+        
+    }
+
     const bootstrap = () => {
         init();
         handleSubmit();
         handleDelete();
         handleMove();
+        handleEdit();
         state.subscribe(() => {
             view.renderTodos(state.todos);
         });

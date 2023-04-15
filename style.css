@@ -42,7 +42,10 @@ html{
   list-style-type: none;
   gap:10px;
 }
-
+.editing_span{
+  border: rgb(170, 216, 170) solid 1.5px;
+  background-color: white;
+}
 .todo-list li{
   display: flex;
   justify-content: space-between;
