@@ -1,16 +1,3 @@
-/* 
-  client side
-    template: static template
-    logic(js): MVC(model, view, controller): used to server side technology, single page application
-        model: prepare/manage data,
-        view: manage view(DOM),
-        controller: business logic, event bindind/handling
-
-  server side
-    json-server
-    CRUD: create(post), read(get), update(put, patch), delete(delete)
-*/
-
 function myFetch(url, options = {}) {
     return new Promise((res, rej) => {
         let xhr = new XMLHttpRequest();
@@ -59,12 +46,6 @@ const APIs = (() => {
     return { createTodo, deleteTodo, getTodos, updateTodo };
 })();
 
-//IIFE
-//todos
-/* 
-    hashMap: faster to search
-    array: easier to iterate, has order
-*/
 const Model = (() => {
     class State {
         #todos; //private field
@@ -111,7 +92,7 @@ const View = (() => {
         const todocompleted = todos.filter((todo) => todo.completed);
         //pending list
         todopending.forEach((todo) => {
-            const liTemplate = `<li><span id="${todo.id}">${todo.content}</span><button class="edit-btn" id="edit-btn_${todo.id}">edit</button><button class="delete-btn" id="delete-btn/${todo.id}">delete</button><button class="move-btn" id="move-btn_${todo.id}">-></button></li>`;
+            const liTemplate = `<li><span id="${todo.id}">${todo.content}</span><button class="edit-btn" id="edit-btn_${todo.id}">edit</button><button class="delete-btn" id="delete-btn/${todo.id}">delete</button><button class="move-btn" id="move-btn_${todo.id}">=></button></li>`;
             todosPendingTemplate += liTemplate;
         });
         if (todopending.length === 0) {
@@ -121,7 +102,7 @@ const View = (() => {
 
         //completed list
         todocompleted.forEach((todo) => {
-            const liTemplate = `<li><button class="move-btn" id="move-btn_${todo.id}"><-</button><span>${todo.content}</span><button class="edit-btn" id="edit-btn_${todo.id}">edit</button><button class="delete-btn" id="delete-btn/${todo.id}">delete</button></li>`;
+            const liTemplate = `<li><button class="move-btn" id="move-btn_${todo.id}"><=</button><span>${todo.content}</span><button class="edit-btn" id="edit-btn_${todo.id}">edit</button><button class="delete-btn" id="delete-btn/${todo.id}">delete</button></li>`;
             todosCompletedTemplate += liTemplate;
         });
         if (todocompleted.length === 0) {
@@ -148,11 +129,6 @@ const Controller = ((view, model) => {
 
     const handleSubmit = () => {
         view.submitBtnEl.addEventListener("click", (event) => {
-            /* 
-                1. read the value from input
-                2. post request
-                3. update view
-            */
             const inputValue = view.inputEl.value;
             model.createTodo({ content: inputValue, completed:false }).then((data) => {
                 state.todos = [data, ...state.todos];
@@ -162,12 +138,6 @@ const Controller = ((view, model) => {
     };
 
     const handleDelete = () => {
-        //event bubbling
-        /* 
-            1. get id
-            2. make delete request
-            3. update view, remove
-        */
         view.todolistpendingEl.addEventListener("click", (event) => {
             if (event.target.className === "delete-btn") {
                 const id = event.target.id.split("/")[1];
@@ -224,7 +194,6 @@ const Controller = ((view, model) => {
                 spanEl.contentEditable = true;
                 spanEl.addEventListener("keyup", (event) => {
                     if(event.code === 'Enter'){
-                        // console.log("finished!", spanEl.innerHTML)
                         model.updateTodo(+editid, { content: spanEl.innerHTML }).then(() => {
                         spanEl.contentEditable = "false";
                         spanEl.classList.remove("editing_span");
@@ -242,7 +211,6 @@ const Controller = ((view, model) => {
                 spanEl.contentEditable = true;
                 spanEl.addEventListener("keyup", (event) => {
                     if(event.code === 'Enter'){
-                        // console.log("finished!", spanEl.innerHTML)
                         model.updateTodo(+editid, { content: spanEl.innerHTML }).then(() => {
                         spanEl.contentEditable = "false";
                         spanEl.classList.remove("editing_span");

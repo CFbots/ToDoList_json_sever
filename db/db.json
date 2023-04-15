@@ -1,24 +1,54 @@
 {
   "todos": [
     {
-      "content": "hihdwdwdw<div>ihi</div>",
-      "completed": true,
+      "content": "Writing homework",
+      "completed": false,
       "id": 1
     },
     {
-      "content": "hhihiihihihihi<div><br></div>",
-      "completed": true,
+      "content": "Go out with frinds",
+      "completed": false,
       "id": 2
     },
     {
-      "content": "gugug",
-      "completed": false,
+      "content": "Hanging out",
+      "completed": true,
       "id": 3
     },
     {
-      "content": "hihihihihi",
+      "content": "Dating",
       "completed": false,
       "id": 4
+    },
+    {
+      "content": "Sleeping",
+      "completed": false,
+      "id": 6
+    },
+    {
+      "content": "Visiting mom",
+      "completed": true,
+      "id": 7
+    },
+    {
+      "content": "Playing basketball",
+      "completed": true,
+      "id": 8
+    },
+    {
+      "content": "Learning JS hahaha<div><br></div>",
+      "completed": true,
+      "id": 9
+    },
+    {
+      "content": "Practice using fetch",
+      "completed": true,
+      "id": 10
+    },
+    {
+      "content": "Have some boba yeah<div><br></div>",
+      "completed": false,
+      "id": 11
     }
   ]
 }
