@@ -3,13 +3,14 @@
   flex-direction: column;
   border: 1px solid black;
   border-radius: 5px;
-  width: 40rem;
+  width: 44rem;
   height: 30rem;
   padding:10px;
   text-align: center;
   gap:10px;
   align-items: stretch;
-
+  font-family: sans-serif;
+  position: relative;
 }
 
 html{
@@ -22,17 +23,46 @@ html{
   margin-top: 0;
   margin-bottom: 1rem;
 }
+
+p{
+  margin: .5rem 0; 
+  font-weight: 900;
+}
+.submit-btn{
+  background-color: #008cba;
+  color: white;
+  border-radius: .3rem;
+}
 .todolist_container{
   display: flex;
   flex-direction: row;
   justify-content:space-around;
-  margin: auto;
-  margin-top: 0;
-  height: 15rem;
-  width:35rem;
+  background-color: white;
+  margin: 0 .2rem;
+  height: 85%;
+  width:95%;
+  border-radius: .5rem;
+  position: absolute;
+  top: 10%;
+  left: 2%;
+}
+.todolist_pending_container{
+  background-color: #f0f0f0;
+  margin-left: 0;
+  padding: .3rem;
+  border-radius: .5rem;
+}
+.todolist_completed_container{
+  background-color: #f0f0f0;
+  margin-left: 0;
+  padding: .3rem;
+  border-radius: .5rem;
 }
 .todolist_box{
-  border: blue solid 2px;
+  /* border: blue solid 2px; */
+  width: 47%;
+  height: 100%;
+  margin: auto auto;
 }
 .todo-list{
   padding:0;
@@ -42,13 +72,17 @@ html{
   list-style-type: none;
   gap:10px;
 }
+
 .editing_span{
   border: rgb(170, 216, 170) solid 1.5px;
+  border-radius: .3rem;
   background-color: white;
 }
 .todo-list li{
   display: flex;
   justify-content: space-between;
+  background-color: #e6e2d3;
+  border-radius: .5rem;
 }
 .todo-list li span{
   flex-grow: 1;

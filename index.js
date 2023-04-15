@@ -11,10 +11,27 @@
     CRUD: create(post), read(get), update(put, patch), delete(delete)
 */
 
+function myFetch(url, options = {}) {
+    return new Promise((res, rej) => {
+        let xhr = new XMLHttpRequest();
+        xhr.open(options.method || "GET", url);
+        xhr.responseType = "json";
+        for (let headerName in options.headers) {
+            xhr.setRequestHeader(headerName, options.headers[headerName]);
+        }
+        xhr.onload = () => {
+            res(xhr.response);
+        };
+        xhr.onerror = () => {
+            rej(new Error("myFetch failed"));
+        };
+        xhr.send(options.body);
+    });
+}
 
 const APIs = (() => {
     const createTodo = (newTodo) => {
-        return fetch("http://localhost:3000/todos", {
+        return myFetch("http://localhost:3000/todos", {
             method: "POST",
             body: JSON.stringify(newTodo),
             headers: { "Content-Type": "application/json" },
@@ -22,17 +39,17 @@ const APIs = (() => {
     };
 
     const deleteTodo = (id) => {
-        return fetch("http://localhost:3000/todos/" + id, {
+        return myFetch("http://localhost:3000/todos/" + id, {
             method: "DELETE",
         }).then((res) => res.json());
     };
 
     const getTodos = () => {
-        return fetch("http://localhost:3000/todos").then((res) => res.json());
+        return myFetch("http://localhost:3000/todos");
     };
 
     const updateTodo = (id, todoItem) => {
-        return fetch("http://localhost:3000/todos/" + id, {
+        return myFetch("http://localhost:3000/todos/" + id, {
             method: "PATCH",
             body: JSON.stringify(todoItem),
             headers: { "Content-Type": "application/json" },
@@ -104,7 +121,7 @@ const View = (() => {
 
         //completed list
         todocompleted.forEach((todo) => {
-            const liTemplate = `<li><span>${todo.content}</span><button class="edit-btn" id="edit-btn_${todo.id}">edit</button><button class="delete-btn" id="delete-btn/${todo.id}">delete</button><button class="move-btn" id="move-btn_${todo.id}"><-</button></li>`;
+            const liTemplate = `<li><button class="move-btn" id="move-btn_${todo.id}"><-</button><span>${todo.content}</span><button class="edit-btn" id="edit-btn_${todo.id}">edit</button><button class="delete-btn" id="delete-btn/${todo.id}">delete</button></li>`;
             todosCompletedTemplate += liTemplate;
         });
         if (todocompleted.length === 0) {
@@ -220,7 +237,7 @@ const Controller = ((view, model) => {
         view.todolistcompletedEl.addEventListener("click", (event) =>{
             if(event.target.className === "edit-btn"){
                 const editid = event.target.id.split("_")[1];
-                const spanEl = event.target.parentElement.firstChild;
+                const spanEl = event.target.parentElement.children[1];
                 spanEl.classList.add("editing_span");
                 spanEl.contentEditable = true;
                 spanEl.addEventListener("keyup", (event) => {
